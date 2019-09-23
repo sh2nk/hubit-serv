@@ -1,14 +1,11 @@
-# hubit
-Kvantoriada-2019
+# hubit-serv
+### Вычислительная сторона Психоэмоционального тренажера
+##### Kvantoriada-2019
 
-INSTALL:
+## Установка
 
-https://drive.google.com/open?id=0B8_K9DW3E9PlV0phWlFfRGFfcEk
+`sh ./install.sh`
 
-tflearn==1.5
+## Запуск
 
-numpy
-
-imutils
-
-opencv-python
+`sh ./start.sh`
