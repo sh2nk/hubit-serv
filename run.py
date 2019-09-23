@@ -66,7 +66,7 @@ while True:
     for c in range(0, 3):
       frame[200:320, 10:130, c] = face_image[:,:,c] * (face_image[:, :, 3] / 255.0) +  frame[200:320, 10:130, c] * (1.0 - face_image[:, :, 3] / 255.0)
   
-  cv2.imshow('HUBIT', imutils.resize(frame, width=w, height=h))
+  cv2.imshow('HUBIT', imutils.resize(frame, width=w*2, height=h*2))
   if 0xFF == ord('q') & cv2.waitKey(1):
     break
 
