@@ -4,6 +4,9 @@ from em_model import EMR
 import numpy as np
 import imutils
 
+from flask import Flask, request
+app = Flask(__name__)
+
 
 EMOTIONS = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
 cascade_classifier = cv2.CascadeClassifier('haarcascade_files/haarcascade_frontalface_default.xml')
@@ -43,37 +46,16 @@ def format_image(image):
 network = EMR()
 network.build_network()
 
-video_capture = cv2.VideoCapture(0)
-_, frame = video_capture.read()
-(w, h, c) = frame.shape
-font = cv2.FONT_HERSHEY_SIMPLEX
-
-feelings_faces = []
-for index, emotion in enumerate(EMOTIONS):
-  feelings_faces.append(cv2.imread('./emojis/' + emotion + '.png', -1))
-
 i = False
-while True:
-  ret, frame = video_capture.read()
-  result = network.predict(format_image(frame))
-  if result is not None:
-    for index, emotion in enumerate(EMOTIONS):
-      cv2.putText(frame, emotion, (10, index * 20 + 20), cv2.FONT_HERSHEY_PLAIN, 0.5, (0, 255, 0), 1);
-      cv2.rectangle(frame, (130, index * 20 + 10), (130 + int(result[0][index] * 100), (index + 1) * 20 + 4), (255, 0, 0), -1)
-    
-    arr = list(result[0])
-    face_image = feelings_faces[arr.index(max(arr))]
-    for c in range(0, 3):
-      frame[200:320, 10:130, c] = face_image[:,:,c] * (face_image[:, :, 3] / 255.0) +  frame[200:320, 10:130, c] * (1.0 - face_image[:, :, 3] / 255.0)
-  
-  cv2.imshow('HUBIT', imutils.resize(frame, width=w*2, height=h*2))
-  if 0xFF == ord('q') & cv2.waitKey(1):
-    break
 
+@app.route('/api/jpeg', methods=['POST'])
+def login():
+    if request.method == 'POST':
+      r = request
+      frame = cv2.imdecode(r.data, cv2.IMREAD_COLOR)
+      result = network.predict(format_image(frame))
+      print(result)
+        
 
-
-#video_capture = cv2.resize(video_capture, fx=0.5, fy=0.5, interpolation = cv2.INTER_CUBIC)
-#video_capture = imutils.resize(video_capture, width=400)
-video_capture.release()
-cv2.destroyAllWindows()
-exit()
+if __name__ == '__main__':
+    app.run()
