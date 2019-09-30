@@ -49,16 +49,31 @@ def format_image(image):
 def login():
     if request.method == 'POST':
       r = request
-      f = open('frame.jpeg', 'wb')
-      f.write(r.data)
-      f.close()
       nparr = np.fromstring(r.data, np.uint8)
       frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
       result = network.predict(format_image(frame))
-      print(result)
-      return Response(status=200)
+      resp = dict()
+      if result is not None:
+        resp = {
+          'contains':True,
+          'emotions':{
+            'angry':result.item(0),
+            'disgusted':result.item(1),
+            'fearful':result.item(2),
+            'happy':result.item(3),
+            'sad':result.item(4),
+            'surprised':result.item(5),
+            'neutral':result.item(6)
+          }
+        }
+      else: 
+        resp = {
+        'contains':False,
+        'emotions':None
+        }
+    return jsonify(resp)
+    
         
-
 if __name__ == '__main__':
   network.build_network()
   app.run()
