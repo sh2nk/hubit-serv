@@ -4,12 +4,14 @@ from em_model import EMR
 import numpy as np
 import imutils
 
-from flask import Flask, request
+from flask import Flask, request, Response, jsonify
 app = Flask(__name__)
 
 
 EMOTIONS = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
 cascade_classifier = cv2.CascadeClassifier('haarcascade_files/haarcascade_frontalface_default.xml')
+
+network = EMR()
 
 def brighten(data,b):
      datab = data * b
@@ -43,19 +45,20 @@ def format_image(image):
     return None
   return image
 
-network = EMR()
-network.build_network()
-
-i = False
-
 @app.route('/api/jpeg', methods=['POST'])
 def login():
     if request.method == 'POST':
       r = request
-      frame = cv2.imdecode(r.data, cv2.IMREAD_COLOR)
+      f = open('frame.jpeg', 'wb')
+      f.write(r.data)
+      f.close()
+      nparr = np.fromstring(r.data, np.uint8)
+      frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
       result = network.predict(format_image(frame))
       print(result)
+      return Response(status=200)
         
 
 if __name__ == '__main__':
-    app.run()
+  network.build_network()
+  app.run()
