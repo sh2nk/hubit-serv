@@ -18,7 +18,7 @@ class EMR:
     self.target_classes = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
 
   def build_network(self):
-      print("---> Starting Neural Network") 
+      print("Starting Neural Network") 
       self.network = input_data(shape = [None, 48, 48, 1])
       self.network = conv_2d(self.network, 64, 5, activation = 'relu')
       self.network = max_pool_2d(self.network, 3, strides = 2)
@@ -46,11 +46,11 @@ class EMR:
     return self.model.predict(image)
 
   def load_model(self):
-    if isfile("model_1_nimish.tflearn.meta"):
-      self.model.load("model_1_nimish.tflearn")
-      print('---> Loading moodel from:- model_1_nimish.tflearn')
+    if isfile("model.tflearn.meta"):
+      self.model.load("model.tflearn")
+      print('Loading moodel')
     else:
-        print("---> Couldn't find model model_1_nimish.tflearn")
+        print("Couldn't find model")
 
 
 if __name__ == "__main__":
