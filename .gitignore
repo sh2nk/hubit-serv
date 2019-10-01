@@ -2,4 +2,6 @@ venv/
 em_model.pyc
 __pycache__/
 model_1_nimish.tflearn.data-00000-of-00001
+model.tflearn.data-00000-of-00001
 .vscode
+frame.jpeg
