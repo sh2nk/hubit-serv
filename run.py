@@ -3,6 +3,7 @@ import sys
 from em_model import EMR
 import numpy as np
 import imutils
+import bjoern
 
 from flask import Flask, request, Response, jsonify
 app = Flask(__name__)
@@ -76,4 +77,6 @@ def login():
         
 if __name__ == '__main__':
   network.build_network()
-  app.run(host='0.0.0.0')
+  bjoern.listen(app, "0.0.0.0", 8888)
+  print("Listening on 8888")
+  bjoern.run()

@@ -3,5 +3,5 @@ json=`curl -s "https://cloud-api.yandex.net:443/v1/disk/public/resources/downloa
 wget $json -O model.tflearn.data-00000-of-00001
 python3 -m venv venv
 . venv/bin/activate
-pip install setuptools wheel numpy tensorflow==1.5 tflearn imutils opencv-python flask
+pip install setuptools wheel numpy tensorflow==1.8 tflearn imutils opencv-python flask bjoern
 exit
